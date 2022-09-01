@@ -220,6 +220,8 @@ if not os.path.isdir(path_to_frames):
 initial_image_folder = path_to_frames
 initial_images = [img for img in os.listdir(
     initial_image_folder) if img.endswith(".png")]
+initial_images = sorted(
+    initial_images, key=lambda x: int(os.path.splitext(x)[0]))
 grid_count = len(os.listdir(outpath)) - 1
 seed_everything(opt.seed)
 
