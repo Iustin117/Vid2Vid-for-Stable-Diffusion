@@ -254,22 +254,21 @@ if opt.small_batch:
 else:
     config.modelUNet.params.small_batch = False
 
+model = instantiate_from_config(config.modelUNet)
+_, _ = model.load_state_dict(sd, strict=False)
+model.eval()
+
+modelCS = instantiate_from_config(config.modelCondStage)
+_, _ = modelCS.load_state_dict(sd, strict=False)
+modelCS.eval()
+
+modelFS = instantiate_from_config(config.modelFirstStage)
+_, _ = modelFS.load_state_dict(sd, strict=False)
+modelFS.eval()
 
 for png in initial_images:
     path_to_frame = os.path.join(path_to_frames, png)
     init_image = load_img(path_to_frame, opt.H, opt.W).to(device)
-
-    model = instantiate_from_config(config.modelUNet)
-    _, _ = model.load_state_dict(sd, strict=False)
-    model.eval()
-
-    modelCS = instantiate_from_config(config.modelCondStage)
-    _, _ = modelCS.load_state_dict(sd, strict=False)
-    modelCS.eval()
-
-    modelFS = instantiate_from_config(config.modelFirstStage)
-    _, _ = modelFS.load_state_dict(sd, strict=False)
-    modelFS.eval()
 
     if opt.precision == "autocast":
         model.half()
